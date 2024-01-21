@@ -50,97 +50,111 @@ class _CustomerScreenState extends State<CustomerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login Screen'),
+        backgroundColor: Color(0xFF013B23),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(labelText: 'Username'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a username';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: !_isPasswordVisible,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  suffixIcon: IconButton(
-                    icon: Icon(_isPasswordVisible ?
-                    Icons.visibility :
-                    Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                  ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/POS(2).png', // Replace with your actual image asset path
+                  width: 250, // Adjust the width as needed
+                  height: 250, // Adjust the height as needed
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    String username = _usernameController.text;
-                    String password = _passwordController.text;
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(labelText: 'Username'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a username';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: !_isPasswordVisible,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(_isPasswordVisible ?
+                      Icons.visibility :
+                      Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a password';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      String username = _usernameController.text;
+                      String password = _passwordController.text;
 
-                    CustomerLogin customerLogin = CustomerLogin(0, username, password, '', '');
-                    bool isAuthenticated = await customerLogin.save();
+                      CustomerLogin customerLogin = CustomerLogin(0, username, password, '', '');
+                      bool isAuthenticated = await customerLogin.save();
 
-                    if (isAuthenticated) {
-                      int customerId = await getCustomerIdFromDatabase(username);
+                      if (isAuthenticated) {
+                        int customerId = await getCustomerIdFromDatabase(username);
 
-                      if (customerId != -1) {
-                        print('Logged in successfully. Customer ID: $customerId');
-                        // Navigate to CustomerHomeScreen and pass customerId
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CustomerHomeScreen(customerId: customerId),
+                        if (customerId != -1) {
+                          print('Logged in successfully. Customer ID: $customerId');
+                          // Navigate to CustomerHomeScreen and pass customerId
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CustomerHomeScreen(customerId: customerId),
+                            ),
+                          );
+                        } else {
+                          print('Failed to retrieve customer ID');
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Invalid username or password'),
+                            duration: Duration(seconds: 2),
                           ),
                         );
-                      } else {
-                        print('Failed to retrieve customer ID');
                       }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Invalid username or password'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
                     }
-                  }
-                },
-                child: Text('Login'),
-              ),
-              SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  // Navigate to the sign-up screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()),
-                  );
-                },
-                child: Text("Not a member? Sign Up now"),
-              ),
-            ],
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF013B23), // Background color
+                  ),
+                  child: Text('Login'),
+                ),
+                SizedBox(height: 10),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to the sign-up screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUpScreen()),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    primary: Color(0xFF013B23), // Text color
+                  ),
+                  child: Text("Not a member? Sign Up now"),
+                ),
+              ],
+            ),
           ),
         ),
       ),

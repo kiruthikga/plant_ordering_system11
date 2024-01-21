@@ -25,7 +25,8 @@ class UserTypeSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select User Type'),
+        title: Center(child: Text('PLANT ORDERING SYSTEM')),
+        backgroundColor: Color(0xFF013B23),
       ),
       body: Center(
         child: Column(
@@ -39,6 +40,9 @@ class UserTypeSelectionScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => AdminScreen()),
                 );
               },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF013B23), // Background color
+              ),
               child: Text('Admin'),
             ),
             SizedBox(height: 20),
@@ -50,6 +54,9 @@ class UserTypeSelectionScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => CustomerScreen()),
                 );
               },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF013B23), // Background color
+              ),
               child: Text('Customer'),
             ),
           ],

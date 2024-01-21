@@ -1,5 +1,6 @@
 //customer_homepage.dart
 import 'package:flutter/material.dart';
+import 'AccountCust.dart';
 import 'Model/addtocart.dart';
 import 'Model/plant_managment.dart';
 
@@ -76,7 +77,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       onDismissed: (direction) async {
                         bool success = await item.delete();
                         if (success) {
-                         print("success");
+                          print("success");
                         }
                         else {
                           Navigator.pushReplacement(
@@ -111,7 +112,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
-                                'http://172.20.10.4/plant/uploads/${item.plant.plantimagename}',
+                                'http://192.168.43.220/plant/uploads/${item.plant.plantimagename}',
                                 width: 60.0,
                                 height: 60.0,
                                 fit: BoxFit.cover,
@@ -212,6 +213,13 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
+            if (_currentIndex == 1) {
+              // Navigate to the AccountPage when the "Account" icon is tapped
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AccountPage()),
+              );
+            }
           });
         },
         items: [
@@ -318,7 +326,7 @@ class _GridItem extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.network(
-                'http://172.20.10.4/plant/uploads/${plant.plantimagename}',
+                'http://192.168.43.220/plant/uploads/${plant.plantimagename}',
                 width: double.infinity,
                 height: 150.0,
                 fit: BoxFit.cover,
@@ -440,12 +448,6 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                       child: Text('Add to Cart'),
                     ),
 
-
-
-
-
-
-
                     ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context); // Close the dialog
@@ -488,7 +490,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
                 child: Image.network(
-                  'http://172.20.10.4/plant/uploads/${widget.plant.plantimagename}', // Corrected field name
+                  'http://192.168.43.220/plant/uploads/${widget.plant.plantimagename}', // Corrected field name
                   width: double.infinity,
                   height: 200.0,
                   fit: BoxFit.cover,

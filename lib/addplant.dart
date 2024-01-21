@@ -65,7 +65,7 @@ class _AddPlantScreenState extends State<AddPlantScreen> {
       return;
     }
 
-    String apiUrl = 'http://10.131.74.78/plant/plant.php'; // Replace with your server address
+    String apiUrl = 'http://192.168.43.220/plant/plant.php'; // Replace with your server address
 
     var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
     request.fields['plantname'] = plantName;

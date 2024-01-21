@@ -8,7 +8,13 @@ class Customer {
   String customerFullname;
   String phoneNo;
 
-  Customer(this.id, this.customerUsername, this.customerPassword, this.customerFullname, this.phoneNo);
+  Customer({
+    required this.id,
+    required this.customerUsername,
+    required this.customerPassword,
+    required this.customerFullname,
+    required this.phoneNo,
+  });
 
   // For loading data from JSON
   Customer.fromJson(Map<String, dynamic> json)
@@ -127,4 +133,6 @@ class Customer {
     return result;
   }
 
+
 }
+

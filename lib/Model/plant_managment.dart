@@ -19,14 +19,16 @@ class Plant {
     required this.plantquantity,
   });
 
-  // For loading data from JSOn
   Plant.fromJson(Map<String, dynamic> json)
-      : id = int.tryParse(json['plant_id'] as String) ?? 0, // Assuming the key in JSON is 'plant_id'
+      : id = json['plant_id'] as int? ?? 0,
         plantname = json['plant_name'] as String? ?? '',
         plantimagename = json['plant_image_name'] as String? ?? '',
         planttype = json['plant_type'] as String? ?? '',
-        plantprice = double.tryParse(json['plant_price'] as String) ?? 0.0,
-        plantquantity = int.tryParse(json['plant_quantity'] as String) ?? 0;
+        plantprice = (json['plant_price'] is String)
+            ? double.tryParse(json['plant_price'] as String) ?? 0.0
+            : (json['plant_price'] as num?)?.toDouble() ?? 0.0,
+        plantquantity = json['plant_quantity'] as int? ?? 0;
+
 
   // For converting to JSON
   Map<String, dynamic> toJson() =>
