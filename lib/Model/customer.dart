@@ -37,22 +37,22 @@ class Customer {
     RequestController req = RequestController(path: "/plant/customers_signup.php");
     req.setBody(toJson());
 
-    await req.post();
+    try {
+      await req.post();
 
-    if (req.status() == 200 && req.result()['success'] == true) {
-      return true;
-    } else {
-      print('Error signing up customer remotely: ${req.status()}, ${req.result()}');
+      if (req.status() == 200 || req.status() == 201) {
+        print('Successfully signed up.');
+        return true;
+      } else {
+        print('Error signing up customer remotely: ${req.status()}, ${req.result()}');
+        return false;
+      }
+    } catch (e) {
+      // Handle any exceptions that might occur during the request
+      print('Exception during sign up: $e');
       return false;
     }
   }
-
-
-
-
-
-
-
 
 
   // Add save, update, delete, and loadAll methods here as needed
@@ -64,7 +64,7 @@ class Customer {
     // Use the POST method for authentication
     await req.post();
 
-    if (req.status() == 200) {
+    if (req.status() == 200 || req.status() == 201) {
       // Check if the credentials are correct by examining the server response
       if (req.result()['authenticated'] == true) {
         return true;
@@ -79,20 +79,20 @@ class Customer {
   }
 
   Future<bool> update() async {
-    RequestController req = RequestController(path: "/plant/customers_signup.php");
+    // API OPERATION
+    RequestController req = RequestController(path: "/plant/editProfCust.php");
     req.setBody(toJson());
 
-    // Update in remote database
-    await req.put();
-    if (req.status() != 200) {
-      // Error handling for remote update
-      print("Error updating customer remotely: ${req.status()}, ${req.result()}");
+    // Use the PUT or PATCH method for updating data
+    await req.put(); // or req.patch();
+
+    if (req.status() == 200 || req.status() == 201) {
+      print('Successfully updated customer data.');
+      return true;
+    } else {
+      print('Error updating customer remotely: ${req.status()}, ${req.result()}');
       return false;
     }
-
-    // Handle local update if needed
-
-    return true;
   }
 
   Future<bool> delete(Map<String, dynamic> requestBody) async {
@@ -103,7 +103,7 @@ class Customer {
 
     // Delete from remote database
     await req.delete(requestBody);
-    if (req.status() != 200) {
+    if (req.status() != 200 || req.status() == 201) {
       print("Error deleting customer remotely: ${req.status()}, ${req.result()}");
       return false;
     }
@@ -135,4 +135,3 @@ class Customer {
 
 
 }
-

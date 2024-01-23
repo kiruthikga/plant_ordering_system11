@@ -19,7 +19,7 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   int _currentIndex = 0;
   late Future<List<Plant>> _plantsFuture;
-  String ipaddress = "172.20.10.4";
+  String ipaddress = "192.168.43.220";
 
   @override
   void initState() {
@@ -307,7 +307,7 @@ class _EditPlantScreenState extends State<EditPlantScreen> {
   Future<void> uploadImageFile(File imageFile, String filename) async {
     try {
       // Assuming your server endpoint for handling file uploads is /upload
-      var url = Uri.parse('http://172.20.10.4/plant/plant.php');
+      var url = Uri.parse('http://192.168.43.220/plant/plant.php');
 
       // Create a multipart request
       var request = http.MultipartRequest('POST', url);
@@ -474,7 +474,7 @@ class _EditPlantScreenState extends State<EditPlantScreen> {
       child: _selectedImage != null
           ? Image.file(_selectedImage!, fit: BoxFit.cover)
           : Image.network(
-        'http://172.20.10.4/plant/uploads/${widget.plant.plantimagename}',
+        'http://192.168.43.220/plant/uploads/${widget.plant.plantimagename}',
         fit: BoxFit.cover,
       ),
     );

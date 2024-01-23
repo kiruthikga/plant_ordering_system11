@@ -26,9 +26,9 @@ class _AdminScreenState extends State<AdminScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/POS(2).png', // Replace with your actual image asset path
-                width: 250, // Adjust the width as needed
-                height: 250, // Adjust the height as needed
+                'assets/plantos.png', // Replace with your actual image asset path
+                width: 350, // Adjust the width as needed
+                height: 350, // Adjust the height as needed
               ),
               SizedBox(height: 20),
               TextField(

@@ -1,21 +1,88 @@
 import 'package:flutter/material.dart';
+import 'AccCust.dart';
+import 'customer_homepage.dart';
 
-class MyApp extends StatelessWidget {
+void main() {
+  runApp(MaterialApp(
+    home: HelpCentreScreen(customerId: null),
+  ));
+}
+
+class HelpCentreScreen extends StatefulWidget {
+  final int? customerId;
+
+  HelpCentreScreen({required this.customerId});
+
+  @override
+  _HelpCentreScreen createState() => _HelpCentreScreen();
+}
+
+class _HelpCentreScreen extends State<HelpCentreScreen> {
+  int _currentIndex = 0;
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Account Page'),
+          title: Text('Help Centre'),
           backgroundColor: Color(0xFF013B23),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back), // Use the appropriate icon for logout
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AccCustScreen(customerId: null,)),
+              );
+            },
+          ),
         ),
-        body: HelpCentre(),
+        body: HelpCentreInfo(),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          selectedItemColor: _currentIndex == 1 ? Colors.green : Colors.grey,
+          unselectedItemColor: _currentIndex == 1 ? Colors.grey : Colors.green,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+              if (_currentIndex == 0) {
+                // Navigate to the AccountPage when the "Home" icon is tapped
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CustomerHomeScreen(customerId: null,)),
+                );
+              } else if (_currentIndex == 1) {
+                // Navigate to the AccountPage when the "Account" icon is tapped
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AccCustScreen(customerId: null,)),
+                );
+              }
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Account',
+            ),
+          ],
+          selectedLabelStyle: TextStyle(color: Colors.green),
+        ),
       ),
     );
   }
 }
-
-class HelpCentre extends StatelessWidget {
+class HelpCentreInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -35,7 +102,7 @@ class HelpCentre extends StatelessWidget {
             categoryName: 'Ordering Plants',
             items: ['[Browse and search] Tips on finding plants using the search and browse functions.',
               '[Product details] How to view detailed information about each plant.',
-            '[Adding to cart] Instructions on how to add plants to the shopping cart'],
+              '[Adding to cart] Instructions on how to add plants to the shopping cart'],
           ),
           HelpTile(
             categoryName: 'Checkout Process',
@@ -46,24 +113,24 @@ class HelpCentre extends StatelessWidget {
           HelpTile(
             categoryName: 'Terms and Policies',
             items:
-              ['Welcome to our Plant Ordering System! By utilizing our platform,'
-                  ' users agree to adhere to the following terms and policies.'
-                  ' Users are responsible for accurate and up-to-date information '
-                  'during account creation, ensuring the security of their login '
-                  'credentials. The ordering process involves accurate product '
-                  'information, payment confirmation, and adherence to specified'
-                  'pricing, taxes, and fees. We commit to providing transparent '
-                  'shipping and delivery details, with users able to track orders. '
-                  'Our return policy outlines conditions for returns and the refund'
-                  ' process. Users are expected to comply with system rules,'
-                  ' maintain data accuracy, and acknowledge our privacy and data '
-                  'security practices. Intellectual property rights and limitations'
-                  ' of liability are specified, with the governing law and jurisdiction'
-                  ' clearly defined. We reserve the right to update terms, with '
-                  'continued use implying acceptance of changes. For customer '
-                  'support and legal inquiries, contact information is provided.'
-                  ' These terms and policies are effective as of [Effective Date].',
-              ],
+            ['Welcome to our Plant Ordering System! By utilizing our platform,'
+                ' users agree to adhere to the following terms and policies.'
+                ' Users are responsible for accurate and up-to-date information '
+                'during account creation, ensuring the security of their login '
+                'credentials. The ordering process involves accurate product '
+                'information, payment confirmation, and adherence to specified'
+                'pricing, taxes, and fees. We commit to providing transparent '
+                'shipping and delivery details, with users able to track orders. '
+                'Our return policy outlines conditions for returns and the refund'
+                ' process. Users are expected to comply with system rules,'
+                ' maintain data accuracy, and acknowledge our privacy and data '
+                'security practices. Intellectual property rights and limitations'
+                ' of liability are specified, with the governing law and jurisdiction'
+                ' clearly defined. We reserve the right to update terms, with '
+                'continued use implying acceptance of changes. For customer '
+                'support and legal inquiries, contact information is provided.'
+                ' These terms and policies are effective as of [Effective Date].',
+            ],
           ),
         ],
       ),

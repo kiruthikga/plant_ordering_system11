@@ -1,6 +1,6 @@
 //customer_homepage.dart
 import 'package:flutter/material.dart';
-import 'AccountCust.dart';
+import 'AccCust.dart';
 import 'Model/addtocart.dart';
 import 'Model/plant_managment.dart';
 
@@ -23,6 +23,21 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   int _currentIndex = 0;
   String _selectedCategory = 'All'; // Initialize with 'All'
   late Future<List<Plant>> _plantsFuture;
+
+  void _markCartItemsAsPurchased() async {
+    // Get the cart items for the customer
+    List<Cart> cartItems = await Cart.loadAll(widget.customerId);
+
+    // Mark each cart item as purchased (delete them)
+    for (var item in cartItems) {
+      bool success = await item.delete();
+      if (success) {
+        print("Item ${item.plant.plantname} removed from cart.");
+      } else {
+        print("Error removing item ${item.plant.plantname} from cart.");
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -140,7 +155,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
-                                'http://172.20.10.6/plant/uploads/${item.plant.plantimagename}',
+                                'http://192.168.43.220/plant/uploads/${item.plant.plantimagename}',
                                 width: 60.0,
                                 height: 60.0,
                                 fit: BoxFit.cover,
@@ -190,8 +205,22 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   children: [
                     TextButton(
                       onPressed: () async {
-                        //you try
-                        // if u its tough to do just procced with dummpy
+                        // Calculate the total sum of items in the cart
+                        double totalSum = 0.0;
+                        plantTotalSum.forEach((plantId, total) {
+                          totalSum += total;
+                        });
+
+                        // Navigate to the payment screen and pass the total sum
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PaymentScreen(
+                          totalAmount: totalSum,
+                          markCartItemsCallback: _markCartItemsAsPurchased,
+                          ),
+                         )
+                        );
                       },
                       child: Text('Proceed to payment'),
                     ),
@@ -244,16 +273,22 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: _currentIndex == 0 ? Colors.green : Colors.grey,
+        unselectedItemColor: _currentIndex == 0 ? Colors.grey : Colors.green,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            if (_currentIndex == 1) {
+            if (_currentIndex == 0) {
+              // Navigate to the AccountPage when the "Home" icon is tapped
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CustomerHomeScreen(customerId: widget.customerId)),
+              );
+            } else if (_currentIndex == 1) {
               // Navigate to the AccountPage when the "Account" icon is tapped
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AccountPage()),
+                MaterialPageRoute(builder: (context) => AccCustScreen(customerId: widget.customerId)),
               );
             }
           });
@@ -376,6 +411,81 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   }
 }
 
+class PaymentScreen extends StatelessWidget {
+  final double totalAmount;
+  final Function()? markCartItemsCallback;
+
+  PaymentScreen({required this.totalAmount, this.markCartItemsCallback});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Payment'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Total Amount: RM ${totalAmount.toStringAsFixed(2)}',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // Add payment details and confirmation button here
+            ElevatedButton(
+              onPressed: () {
+                // Perform payment processing logic here
+                // Generate a receipt and display it
+                _showReceiptDialog(context);
+              },
+              child: Text('Confirm Payment'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showReceiptDialog(BuildContext context) {
+    markCartItemsCallback?.call();
+    // Implement receipt generation logic and display it in a dialog
+    // Include details such as customer name, date, items purchased, total amount, etc.
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text('Receipt')),
+          content: Column(
+            children: [
+              // Include receipt details here
+              Text('Thank you for your purchase!'),
+              Text('Date: ${DateTime.now()}'),
+              Text('Total Amount: RM ${totalAmount.toStringAsFixed(2)}'),
+              // Add other receipt details here
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CustomerHomeScreen(customerId: null,))
+                );
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+
 class _GridItem extends StatelessWidget {
   final Plant plant;
   final Function(Plant, BuildContext) onPressed;
@@ -397,7 +507,7 @@ class _GridItem extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.network(
-                'http://172.20.10.6/plant/uploads/${plant.plantimagename}',
+                'http://192.168.43.220/plant/uploads/${plant.plantimagename}',
                 width: double.infinity,
                 height: 150.0,
                 fit: BoxFit.cover,
@@ -561,7 +671,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
                 child: Image.network(
-                  'http://172.20.10.6/plant/uploads/${widget.plant.plantimagename}', // Corrected field name
+                  'http://192.168.43.220/plant/uploads/${widget.plant.plantimagename}', // Corrected field name
                   width: double.infinity,
                   height: 200.0,
                   fit: BoxFit.cover,

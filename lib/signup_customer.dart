@@ -42,8 +42,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _signUp() async {
-    // Mock signup success for demonstration purposes
-    bool signUpSuccess = true;
+    Customer customer = Customer(
+      id: 0,
+      customerUsername: _usernameController.text,
+      customerPassword: _passwordController.text,
+      customerFullname: _fullNameController.text,
+      phoneNo: _phoneNoController.text,
+    );
+
+    bool signUpSuccess = await customer.signUp();
 
     if (signUpSuccess) {
       // Navigate to the SuccessScreen after successful signup
@@ -168,7 +175,7 @@ class SuccessScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      backgroundColor: Color(0xFF024362),
+                      backgroundColor: Color(0xFF013B23),
                     ),
                     child: Text(
                       'Proceed to Login',

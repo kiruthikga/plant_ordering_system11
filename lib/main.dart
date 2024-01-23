@@ -54,9 +54,9 @@ class UserTypeSelectionScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Plant Shop',
+                    'PlantOS',
                     style: TextStyle(
-                      fontSize: 35,
+                      fontSize: 40,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF013B23),
                     ),
