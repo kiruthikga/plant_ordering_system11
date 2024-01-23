@@ -49,7 +49,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Screen'),
+        title: Text('Hi, Customer'),
         backgroundColor: Color(0xFF013B23),
       ),
       body: SingleChildScrollView(

@@ -61,6 +61,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -76,6 +77,7 @@ flutter:
     - assets/POS.png
     - assets/POS(1).png
     - assets/POS(2).png
+    - assets/wallpaper2.jpeg
 
       # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

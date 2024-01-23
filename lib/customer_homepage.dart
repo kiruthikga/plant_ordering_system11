@@ -21,12 +21,40 @@ class CustomerHomeScreen extends StatefulWidget {
 
 class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   int _currentIndex = 0;
+  String _selectedCategory = 'All'; // Initialize with 'All'
   late Future<List<Plant>> _plantsFuture;
 
   @override
   void initState() {
     super.initState();
     _plantsFuture = Plant.loadAll();
+  }
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Perform logout actions here
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
+              child: Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showCartDialog() async {
@@ -112,7 +140,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
-                                'http://192.168.43.220/plant/uploads/${item.plant.plantimagename}',
+                                'http://172.20.10.6/plant/uploads/${item.plant.plantimagename}',
                                 width: 60.0,
                                 height: 60.0,
                                 fit: BoxFit.cover,
@@ -183,7 +211,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     );
   }
 
-
   void _viewPlantDetails(Plant plant, BuildContext context) {
     Navigator.push(
       context,
@@ -197,7 +224,14 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Customer Home Screen'),
+        title: Text('Discover'),
+        backgroundColor: Color(0xFF013B23),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back), // Use the appropriate icon for logout
+          onPressed: () {
+            _showLogoutDialog();
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.shopping_cart),
@@ -210,6 +244,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.grey,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
@@ -253,13 +289,48 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             child: Text('No plants available'),
           );
         } else {
-          return _buildPlantGrid(snapshot.data!);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCategoryDropdown(snapshot.data!), // New widget for the category dropdown
+              Expanded(
+                child: _buildPlantGrid(snapshot.data!),
+              ),
+            ],
+          );
         }
       },
     );
   }
 
+  Widget _buildCategoryDropdown(List<Plant> plants) {
+    Set<String> categories = plants.map((plant) => plant.planttype).toSet();
+    List<String> categoryList = ['All', ...categories.toList()];
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: DropdownButton<String>(
+        value: _selectedCategory,
+        onChanged: (String? newValue) {
+          setState(() {
+            _selectedCategory = newValue ?? 'All'; // Update the selected category
+          });
+        },
+        items: categoryList.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   Widget _buildPlantGrid(List<Plant> plants) {
+    List<Plant> filteredPlants = _selectedCategory == 'All'
+        ? plants
+        : plants.where((plant) => plant.planttype == _selectedCategory).toList();
+
     Map<String, List<Plant>> groupedPlants = {};
     plants.forEach((plant) {
       if (!groupedPlants.containsKey(plant.planttype)) {
@@ -326,7 +397,7 @@ class _GridItem extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.network(
-                'http://192.168.43.220/plant/uploads/${plant.plantimagename}',
+                'http://172.20.10.6/plant/uploads/${plant.plantimagename}',
                 width: double.infinity,
                 height: 150.0,
                 fit: BoxFit.cover,
@@ -440,7 +511,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.lightGreen,
+                        primary: Color(0xFF013B23),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -490,7 +561,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
                 child: Image.network(
-                  'http://192.168.43.220/plant/uploads/${widget.plant.plantimagename}', // Corrected field name
+                  'http://172.20.10.6/plant/uploads/${widget.plant.plantimagename}', // Corrected field name
                   width: double.infinity,
                   height: 200.0,
                   fit: BoxFit.cover,
@@ -579,7 +650,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                           children: [
                             Icon(
                               Icons.local_shipping,
-                              color: Colors.greenAccent,
+                              color: Color(0xFF013B23),
                             ),
                             SizedBox(width: 8.0),
                             Text(
@@ -613,7 +684,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                       children: [
                         Icon(
                           Icons.local_shipping_outlined,
-                          color: Colors.greenAccent,
+                          color: Color(0xFF013B23),
                         ),
                         Text(
                           '     Shipping :  RM 0.00',
@@ -631,7 +702,7 @@ class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
                           _showPlantDetailsDialog();
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.lightGreen,
+                          primary: Color(0xFF013B23),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),

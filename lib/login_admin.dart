@@ -16,7 +16,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Screen'),
+        title: Text('Hi, Admin'),
         backgroundColor: Color(0xFF013B23),
       ),
       body: SingleChildScrollView(
@@ -31,13 +31,6 @@ class _AdminScreenState extends State<AdminScreen> {
                 height: 250, // Adjust the height as needed
               ),
               SizedBox(height: 20),
-              Text(
-                'Welcome', // Add this line for the welcome text
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               TextField(
                 controller: _usernameController,
                 decoration: InputDecoration(labelText: 'Username'),
@@ -107,7 +100,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF013B23), // Background color
-                  ),
+                ),
                 child: Text('Login'),
               ),
             ],
@@ -117,5 +110,3 @@ class _AdminScreenState extends State<AdminScreen> {
     );
   }
 }
-
-
