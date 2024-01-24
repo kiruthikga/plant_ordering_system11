@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Model/admin_login.dart';
 import 'admin_homepage_managment.dart';
+import 'admin_panel.dart';
 
 class AdminScreen extends StatefulWidget {
   @override
@@ -86,7 +87,7 @@ class _AdminScreenState extends State<AdminScreen> {
                     // Navigate to the admin home screen on successful login
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => AdminHomeScreen()),
+                      MaterialPageRoute(builder: (context) => AdminPanel()),
                     );
                   } else {
                     // Show an error message for unsuccessful login

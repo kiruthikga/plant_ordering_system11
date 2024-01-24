@@ -4,6 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'addplant.dart';
+import 'login_admin.dart';
+import 'admin_panel.dart';
+
 
 void main() {
   runApp(MaterialApp(
@@ -32,6 +35,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Home Screen'),
+        backgroundColor: Color(0xFF013B23),
       ),
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
@@ -40,15 +44,23 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           setState(() {
             _currentIndex = index;
           });
+          print('BottomNavigationBar Index: $index'); // Debugging print statement
+
+          if (index == 2) {
+            // Logout button is tapped
+            _logout();
+          }
         },
+        selectedItemColor: Color(0xFF013B23),
+        unselectedItemColor: Color(0xFF013B23),
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Account',
+            icon: Icon(Icons.logout),
+            label: 'logout',
           ),
         ],
       ),
@@ -64,7 +76,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             ),
           );
         },
-        child: Icon(Icons.add),
+        backgroundColor: Color(0xFF013B23),
+        child: Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -253,6 +266,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       _plantsFuture = Plant.loadAll();
     });
   }
+  void _logout() {
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => AdminScreen()),
+    );
+  }
+
 }
 
 

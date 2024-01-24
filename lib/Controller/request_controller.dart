@@ -10,7 +10,7 @@ class RequestController {
   final Map<String, String> _header = {};
   dynamic _resultData;
 
-  RequestController({required this.path, this.server = "http://172.20.10.4"});
+  RequestController({required this.path, this.server = "http://192.168.43.220"});
 
   setBody(Map<String, dynamic> data) {
     _body.clear();
@@ -97,4 +97,22 @@ class RequestController {
   int status() {
     return _res?.statusCode ?? 0;
   }
+}
+
+Future<List<dynamic>?> getCustomers() async {
+  try {
+    String url = "/plant/customers_signup.php"; // Adjust the URL based on your API
+    RequestController req = RequestController(path: url);
+    await req.get();
+    if (req.status() == 200 && req.result() != null) {
+      List<dynamic> customersData = req.result()['data'];
+      // You can handle the customer data here or return it for further processing
+      return customersData;
+    } else {
+      print("Error retrieving customers from the database: ${req.status()}, ${req.result()}");
+    }
+  } catch (e) {
+    print("Exception: $e");
+  }
+  return null;
 }
