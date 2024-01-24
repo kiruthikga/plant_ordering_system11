@@ -1,4 +1,4 @@
-# pkant_ordering_system
+# plant_ordering_system
 
 A new Flutter project.
 
