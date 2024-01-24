@@ -6,7 +6,7 @@ Project Title : Plant Ordering System
 Group 11  : Kiruthikga A/P Asogan (B032210042)
             Fatin Ainaa Syazwani Bt Mohd Refaee (B032210080) 
             Nur Amelia Asyqin Bt Mohd Ismailuzabihullah (B032210011)
-            Israt Jahan Bhuiyan 
+            Israt Jahan Bhuiyan (B032020049)
 
 
 For our projects there has two main terget users which is Admin and Customer.
